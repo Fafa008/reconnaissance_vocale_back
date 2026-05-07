@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import router
 import uvicorn
 
+
 app = FastAPI(title="Speech Recognition API")
 
 app.add_middleware(
