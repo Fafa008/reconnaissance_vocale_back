@@ -1,0 +1,92 @@
+# ---------------------------
+# ENVIRONNEMENT PYTHON
+# ---------------------------
+venv/
+.env
+.env.*
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+*.pdb
+
+# ---------------------------
+# FASTAPI
+# ---------------------------
+# Fichiers générés
+*.log
+logs/
+instance/
+uploads/
+temp/
+cache/
+
+# Uvicorn reload
+*.pid
+
+# ---------------------------
+# MODELS / ML
+# ---------------------------
+checkpoints/
+models/
+runs/
+outputs/
+*.pt
+*.pth
+*.bin
+*.onnx
+
+# HuggingFace cache
+~/.cache/huggingface/
+huggingface/
+hf_cache/
+cache/
+transformers_cache/
+tokenizers_cache/
+
+# Torch cache
+~/.cache/torch/
+torch_cache/
+
+# ---------------------------
+# DATASETS LOCAUX
+# ---------------------------
+data/
+datasets/
+*.wav
+*.mp3
+*.flac
+*.tsv
+*.csv
+
+# On permet toutefois les dossiers vides utiles
+!data/.gitkeep
+!datasets/.gitkeep
+
+# ---------------------------
+# DÉPÔTS ET NOTEBOOKS
+# ---------------------------
+.ipynb_checkpoints/
+*.ipynb
+
+# ---------------------------
+# SYSTEME / OS
+# ---------------------------
+.DS_Store
+Thumbs.db
+
+# ---------------------------
+# EDITORS
+# ---------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+
+# ---------------------------
+# BUILD / DIST
+# ---------------------------
+dist/
+build/
+*.egg-info/
