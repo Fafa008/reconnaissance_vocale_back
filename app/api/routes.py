@@ -1,11 +1,11 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from app.services.transcriber import transcribe_audio
 from temporalio.client import Client
-from temporal.activities import TranscriptionParams
+from app.temporal.shared_types import TranscriptionParams
 import uuid
 import aiofiles
 import os
-
+from pathlib import Path  # ajouté
 
 router = APIRouter()
 
@@ -13,17 +13,17 @@ router = APIRouter()
 async def transcribe(file: UploadFile = File(...)):
     return await transcribe_audio(file)
 
-# Nouvel endpoint asynchrone avec Temporal
 @router.post("/orchestrate")
 async def orchestrate_transcription(file: UploadFile = File(...)):
     # 1. Vérification du format audio
     if not file.content_type.startswith("audio/"):
         raise HTTPException(400, "Le fichier doit être un audio.")
     
-    # 2. Sauvegarde temporaire du fichier
-    temp_dir = "temp_uploads"
-    os.makedirs(temp_dir, exist_ok=True)
-    temp_filename = f"{temp_dir}/{uuid.uuid4()}.wav"
+    # 2. Sauvegarde temporaire du fichier avec chemin absolu
+    temp_dir = Path("temp_uploads").absolute()
+    temp_dir.mkdir(exist_ok=True)
+    temp_filename = str(temp_dir / f"{uuid.uuid4()}.wav")
+    
     async with aiofiles.open(temp_filename, 'wb') as out_file:
         content = await file.read()
         await out_file.write(content)
@@ -33,7 +33,7 @@ async def orchestrate_transcription(file: UploadFile = File(...)):
     workflow_id = f"transcription-{uuid.uuid4()}"
     handle = await client.start_workflow(
         "SpeechRecognitionWorkflow",
-        TranscriptionParams(file_path=temp_filename),
+        TranscriptionParams(file_path=temp_filename),  # maintenant chemin absolu
         id=workflow_id,
         task_queue="transcription-task-queue",
     )
@@ -52,7 +52,9 @@ async def get_orchestration_status(workflow_id: str):
     result = await handle.describe()
     if result.status.name == "COMPLETED":
         final_result = await handle.result()
-        return {"status": "completed", "transcription": final_result.text}
+        # final_result est un dict : {"text": "...", "confidence": ...}
+        transcription = final_result.get("text", "") if isinstance(final_result, dict) else final_result.text
+        return {"status": "completed", "transcription": transcription}
     elif result.status.name == "RUNNING":
         return {"status": "running"}
     else:

@@ -3,7 +3,7 @@ from temporalio import workflow
 from temporalio.common import RetryPolicy
 from .shared_types import TranscriptionParams, TranscriptionResult
 
-@workflow.defn
+@workflow.defn(sandboxed=False)   # ← crucial
 class SpeechRecognitionWorkflow:
     @workflow.run
     async def run(self, params: TranscriptionParams) -> TranscriptionResult:
@@ -16,7 +16,8 @@ class SpeechRecognitionWorkflow:
         result = await workflow.execute_activity(
             "transcribe_audio_activity",
             params,
-            start_to_close_timeout=timedelta(seconds=300),
+            start_to_close_timeout=timedelta(seconds=300),    # 5 min pour l'activité
+            schedule_to_close_timeout=timedelta(seconds=600), # 10 min au total
             retry_policy=retry_policy,
             task_queue="transcription-task-queue"
         )
