@@ -28,7 +28,6 @@ cache/
 # MODELS / ML
 # ---------------------------
 checkpoints/
-models/
 runs/
 outputs/
 *.pt
@@ -51,7 +50,6 @@ torch_cache/
 # ---------------------------
 # DATASETS LOCAUX
 # ---------------------------
-data/
 datasets/
 *.wav
 *.mp3
