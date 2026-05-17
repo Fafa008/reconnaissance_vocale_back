@@ -1,4 +1,14 @@
-MODEL_NAME = "jonatasgrosman/wav2vec2-large-xlsr-53-french"
+Model0 = "jonatasgrosman/wav2vec2-large-xlsr-53-french"
+Model1 = "LeBenchmark/wav2Vec2-FR-3K-base"
+Model2 = "LeBenchmark/wav2vec2-FR-14K-light"
+Model3 = "facebook/wav2vec2-base-fr"
+Model4 = "openai/whisper-tiny"
+Model5 = "patrickvonplaten/wav2vec2-base-100k-fr"
+Model6 = "facebook/wav2vec2-base-960h"
+Model7 ="openai/whisper-base"
+Model8 ="ggerganov/whisper.cpp"
+Model9 = "facebook/wav2vec2-base-960h"
+MODEL_NAME = Model0
 USE_GPU = False
 SAMPLE_RATE = 16000
 MAX_AUDIO_DURATION = 30
